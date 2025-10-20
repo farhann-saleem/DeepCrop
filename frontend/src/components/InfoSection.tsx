@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import "../App.css";
 import healthy from "../assets/healthy.jpeg";
 import early from "../assets/early_blight.jpeg";
