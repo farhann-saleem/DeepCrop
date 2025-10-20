@@ -1,6 +1,6 @@
 
 # 🌿 DeepCrop: AI-Powered Potato Disease Detection
-
+https://deepcrop.netlify.app/
 **DeepCrop** is a web app that detects **potato leaf diseases** — *Healthy*, *Early Blight*, or *Late Blight* — using a deep learning model built with **TensorFlow**.  
 It features a **React + TypeScript** frontend (Netlify) and a **Gradio backend** (Hugging Face Spaces).
 
