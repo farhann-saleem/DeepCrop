@@ -1,8 +1,8 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import "../App.css";
 
-const Predictor: React.FC = () => {
+const Predictor = () => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,16 +19,22 @@ const Predictor: React.FC = () => {
   const handleSubmit = async () => {
     if (!file) return;
     setLoading(true);
+
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("data", file); // 'data' is required by Gradio API
 
     try {
-      const res = await axios.post("http://127.0.0.1:5000/predict", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setResult(res.data.label);
-    } catch {
-      alert("Prediction failed. Check backend connection.");
+      const res = await axios.post(
+        "https://farhan2127-deepcrop.hf.space/run/predict",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      const label = res.data?.data?.[0];
+      setResult(label || "Unknown");
+    } catch (err) {
+      console.error(err);
+      alert("Prediction failed. Make sure the Hugging Face Space is running.");
     } finally {
       setLoading(false);
     }
@@ -50,6 +56,33 @@ const Predictor: React.FC = () => {
 
       {preview && <img src={preview} alt="preview" className="preview" />}
       {result && <h3 className="prediction">Prediction: {result}</h3>}
+
+      {/* 👇 New Section: Link to Hugging Face Demo */}
+      <div style={{ marginTop: "20px" }}>
+        <a
+          href="https://huggingface.co/spaces/farhan2127/DeepCrop"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn"
+          style={{
+            backgroundColor: "#2e7d32",
+            color: "white",
+            padding: "10px 18px",
+            borderRadius: "8px",
+            textDecoration: "none",
+            display: "inline-block",
+            transition: "background 0.3s",
+          }}
+          onMouseOver={(e) => {
+            (e.target as HTMLElement).style.backgroundColor = "#1b5e20";
+          }}
+          onMouseOut={(e) => {
+            (e.target as HTMLElement).style.backgroundColor = "#2e7d32";
+          }}
+        >
+          🌿 Open Full Demo on Hugging Face
+        </a>
+      </div>
     </section>
   );
 };
